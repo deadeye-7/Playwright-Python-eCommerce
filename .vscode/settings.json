@@ -1,0 +1,15 @@
+{
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./Web UI - SauceDemo",
+        "-p",
+        "*_test.py"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "editor.accessibilityPageSize": 10,
+    "python.testing.pytestArgs": [
+        "Web UI - SauceDemo"
+    ]
+}
