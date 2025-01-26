@@ -1,10 +1,12 @@
 
 from playwright.sync_api import Page
 import time
+from screenshot_on_failure import screenshot_on_failure
 
 class Login:
-    def __init__(self, page:Page, username, password):
+    def __init__(self, page:Page, username, password, screenshot_dir):
         self.page = page
+        self.screenshot_dir = screenshot_dir
         login_url = "https://www.saucedemo.com/"
 
         username_locator = page.locator("#user-name")
@@ -32,6 +34,8 @@ class SuccessfulLogin(Login):
         ):
             return f"\033[92m Passed => Successful Login\033[0m"
         else:
+            filename = "Successful login_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Successful login: Login was successful but validation failed.\033[0m"
 
 class UnsuccessfulLogin(Login):
@@ -43,6 +47,8 @@ class UnsuccessfulLogin(Login):
         if (error_msg_locator.text_content() == expected_error_msg):
             return f"\033[92m Passed => Unsuccessful Login\033[0m"
         else:
+            filename = "Successful login_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Unsuccessful login: Didn't display the correct error message.\033[0m"
             
     
@@ -55,6 +61,8 @@ class LockedOut(Login):
         if (error_msg_locator.text_content() == expected_error_msg):
             return f"\033[92m Passed => Locked out Login => Passed\033[0m"
         else:
+            filename = "Lockedout login_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Locked out Login: Didn't display the correct error message.\033[0m"
         
 
@@ -93,16 +101,19 @@ class ProblemLogin(Login):
         ):
             return f"\033[92m Passed => Problem Login\033[0m"
         else:
+            filename = "Problem login_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Problem Login: Didn't display correct product data.\033[0m"
+            
         
             
 class PerformanceGlitchLogin(Login):
-    def __init__(self, page:Page, username, password):
+    def __init__(self, page:Page, username, password, screenshot_dir):
         # Start capturing time
         start_time = time.time()
         
         # Perform login from super class
-        super().__init__(page, username, password)
+        super().__init__(page, username, password, screenshot_dir)
 
         # End capturing time
         end_time = time.time()
@@ -120,5 +131,7 @@ class PerformanceGlitchLogin(Login):
         elif (self.login_duration > expected_login_time):
             return f"\033[91m Failed => Performance glitch Login: Login took longer than expected. Login time: {self.login_duration:.2f} sec\033[0m"
         else:
+            filename = "Performance glitch login_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Performance glitch Login: Login did not navigate to the expected URL.\033[0m"
         

@@ -1,9 +1,11 @@
 from playwright.sync_api import Page
+from screenshot_on_failure import screenshot_on_failure
 
 class Cart:
-    def __init__(self, page:Page, product_name):
+    def __init__(self, page:Page, product_name, screenshot_dir):
         self.page = page
         self.product_name = product_name
+        self.screenshot_dir = screenshot_dir
 
         # Get the locators for the product and cart badge
         self.product_locator = self.page.get_by_text(product_name,exact=True) 
@@ -31,6 +33,8 @@ class AddProduct(Cart):
         ):
             return f"\033[92m Passed => '{self.product_name}' successfully added to the cart from the inventory page.\033[0m"
         else:
+            filename = f"{self.product_name}_add_inventory_page_validation_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to add '{self.product_name}' to the cart from the inventory page.\033[0m"
 
 
@@ -56,6 +60,8 @@ class AddProduct(Cart):
         ):
             return f"\033[92m Passed => '{self.product_name}' successfully added to the cart page.\033[0m"
         else:
+            filename = f"{self.product_name}_add_cart_page_validation_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to add '{self.product_name}' to the cart page.\033[0m"
     
     def productdetails_page_validation(self):
@@ -68,6 +74,8 @@ class AddProduct(Cart):
         if (remove_button_locator.count() == 1):
             return f"\033[92m Passed => '{self.product_name}' successfully added to the product details page.\033[0m"
         else:
+            filename = f"{self.product_name}_add_cart_productdetails_page_validation_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to add '{self.product_name}' to the product details page.\033[0m"
 
 class RemoveProduct(Cart):
@@ -89,6 +97,8 @@ class RemoveProduct(Cart):
         ):
             return f"\033[92m Passed => '{self.product_name}' successfully removed from the inventory page.\033[0m"
         else:
+            filename = f"{self.product_name}_remove_product_from_inventory_page.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to remove '{self.product_name}' from the inventory page.\033[0m"
     
     def remove_product_from_cart_page(self):
@@ -108,6 +118,8 @@ class RemoveProduct(Cart):
         if (int(self.cart_badge_locator.text_content()) == self.added_product-1):
             return f"\033[92m Passed => '{self.product_name}' successfully removed from the cart page.\033[0m"
         else:
+            filename = f"{self.product_name}_remove_product_from_cart_page.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to remove '{self.product_name}' from the cart page.\033[0m"
     
     def remove_product_from_productdetails_page(self):
@@ -128,6 +140,8 @@ class RemoveProduct(Cart):
         if (add_button_locator.count() == 1):
             return f"\033[92m Passed => '{self.product_name}' successfully removed from the product details page.\033[0m"
         else:
+            filename = f"{self.product_name}remove_product_from_productdetails_page.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to remove '{self.product_name}' from the product details page.\033[0m"
 
     

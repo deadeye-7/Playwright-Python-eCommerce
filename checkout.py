@@ -1,8 +1,10 @@
 from playwright.sync_api import Page
+from screenshot_on_failure import screenshot_on_failure
 
 class Checkout():
-    def __init__(self, page:Page):
+    def __init__(self, page:Page, screenshot_dir):
         self.page = page
+        self.screenshot_dir = screenshot_dir
 
         # Navigate to Cart page
         cart_button_locator = page.locator(".shopping_cart_link")
@@ -28,7 +30,10 @@ class Checkout():
         if (self.page.url == expecxted_checkout_step1_url):
             return f"\033[92m Passed => Successfully completed checkout step 1\033[0m"
         else:
+            filename = "Checkout_step_1_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to complete checkout step 1\033[0m"
+        
 
     def checkout_step2_validation(self, sub_total, tax, total, expecxted_checkout_step2_url):
         # Click continue button
@@ -56,6 +61,8 @@ class Checkout():
         ):
             return f"\033[92m Passed => Successfully completed checkout step 2\033[0m"
         else:
+            filename = "Checkout_step_2_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to complete checkout step 2\033[0m"
     
     def checkout_complete_validation(self, expected_complete_title, expected_complete_msg, expected_complete_url):
@@ -74,6 +81,8 @@ class Checkout():
         ):
             return f"\033[92m Passed => Successfully completed checkout\033[0m"
         else:
+            filename = "Checkout_complete_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to complete checkout\033[0m"
     
     def checkout_back_to_inventory(self, expecxted_inventory_page_url):
@@ -85,6 +94,8 @@ class Checkout():
         if (self.page.url == expecxted_inventory_page_url):
             return f"\033[92m Passed => Returned to the inventory page\033[0m"
         else:
+            filename = "Checkout_back_to_inventory_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Failed to return to the inventory page\033[0m"
 
 

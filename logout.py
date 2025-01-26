@@ -1,8 +1,10 @@
 from playwright.sync_api import Page
+from screenshot_on_failure import screenshot_on_failure
 
 class Logout:
-    def __init__(self, page:Page):
+    def __init__(self, page:Page, screenshot_dir):
         self.page = page
+        self.screenshot_dir = screenshot_dir
         self.login_url = "https://www.saucedemo.com/"
 
         menu_icon_locator = page.locator("#react-burger-menu-btn")
@@ -19,5 +21,7 @@ class Logout:
         if (self.page.url == self.login_url):
             return f"\033[92m Passed => Successfully Logout\033[0m"
         else:
+            filename = "Logout_failure.png"
+            screenshot_on_failure (self.page, self.screenshot_dir, filename)
             return f"\033[91m Failed => Successful Logout: Logout failed.\033[0m"
 
