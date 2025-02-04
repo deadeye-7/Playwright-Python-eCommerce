@@ -11,7 +11,6 @@ from datetime import datetime
 timestamp = datetime.now().strftime("%d-%m-%Y %H-%M")
 screenshot_dir= os.path.join("/Users/jubairshome/Documents/myGitRepo/Playwright-python-automation/Web UI - SauceDemo/Screenshots", timestamp)
 os.makedirs(screenshot_dir, exist_ok=True)
-print(f"Test run screenshots will be saved in: {screenshot_dir}")
 
 with sync_playwright() as playwright:
     # Launch a browser

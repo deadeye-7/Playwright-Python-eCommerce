@@ -1,4 +1,3 @@
-
 from playwright.sync_api import Page
 import time
 from screenshot_on_failure import screenshot_on_failure
